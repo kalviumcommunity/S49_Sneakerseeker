@@ -1,16 +1,11 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import React from 'react'
+import Data from './Components/Data.jsx'
 function App() {
-
   return (
-    <>
-      <div>
-      <h1>Welcome to SneakerSeeker</h1>
-      </div>
-    </>
+    <div>
+    <h1>Product Information</h1>
+    <Data/>
+  </div>
   )
 }
 
