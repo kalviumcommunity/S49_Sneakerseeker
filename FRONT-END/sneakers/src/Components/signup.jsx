@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./signup.css";
+import { Link } from 'react-router-dom'; 
 
 export default function Form() {
   const [field, setField] = useState({
@@ -98,8 +99,9 @@ export default function Form() {
           {submitted && field.password !== field.confirmPassword ? (
             <span>Passwords do not match</span>
           ) : null}
-
+          <Link to = "/Home">
           <button className="form-field" type="submit">Sign Up</button>
+          </Link>
         </form>
       </div>
     </div>

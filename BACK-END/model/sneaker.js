@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const sneakerSchema = new mongoose.Schema({
+const SneakerSchema = new mongoose.Schema({
     sneakerName: String,
     price: String,
     color: String,
@@ -8,5 +8,5 @@ const sneakerSchema = new mongoose.Schema({
     review: String,
 })
 
-const UserModel = mongoose.model("sneakers", sneakerSchema);
-module.exports = UserModel;
+const SneakerModel = mongoose.model("sneaker", SneakerSchema);
+module.exports = SneakerModel;
