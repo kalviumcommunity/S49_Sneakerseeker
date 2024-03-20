@@ -13,6 +13,8 @@ function Landingpage() {
       </div>
       <div className="logo">
         <Link to="/SignUp" className="button">Sign up</Link>
+        <Link to="/Users" className="button">Data</Link>
+
         {/* <Link to="/UserList">data</Link>  */}
       </div>
     </div>
