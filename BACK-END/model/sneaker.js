@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Joi = require('joi');
 
 const SneakerSchema = new mongoose.Schema({
     sneakerName: String,

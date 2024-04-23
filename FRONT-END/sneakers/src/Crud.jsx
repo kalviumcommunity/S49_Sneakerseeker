@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 function Users() {
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get('http://localhost:3001/users')
@@ -12,12 +13,13 @@ function Users() {
     }, []);
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:3001/users/${id}`)
+        axios.delete(`http://localhost:3001/deleteUsers/${id}`)
             .then(res => {
                 console.log(res);
                 setUsers(users.filter(user => user._id !== id));
             })
             .catch(err => console.error(err));
+
     };
 
     return (

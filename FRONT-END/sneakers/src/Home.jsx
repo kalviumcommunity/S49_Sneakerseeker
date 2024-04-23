@@ -1,16 +1,28 @@
 import React from "react";
 import axios from 'axios'; 
 import { useEffect, useState } from 'react';
+import Cookies from "js-cookie"; 
+import { useNavigate } from "react-router-dom";
+
 
 function Home(){
     const [users,setUsers] = useState([])
+    const navigate = useNavigate()
     useEffect(() => {
      axios.get('http://localhost:3000/')
      .then(users => setUsers(users.data))
      .catch(err => console.log(err))
     },[])
+
+    const handlelogout = ()=>{
+      Cookies.remove('username')
+      navigate('/login');
+    }
     return(
         <div className="api">
+          <div>
+            <button onClick={handlelogout}>logout</button>
+          </div>
         {users &&
             users.map((guides, id) => (
               <div className="data" key={id}>

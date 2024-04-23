@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const UserModal = require('./model/User.js'); // Corrected import name
+const { UserModal, userValidationSchema } = require('./model/User.js');
 const SneakerModel = require('./model/sneaker.js'); // Import the SneakerModel
 const routes = require('./routes.js');
 
@@ -39,7 +39,7 @@ async function connectToSneakerDB() {
 app.get('/users', async (req, res) => {
     try {
         const users = await UserModal.find({});
-        res.json(users);
+        // res.json(users);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -49,7 +49,7 @@ app.get('/users/:id', async (req, res) => {
     const id = req.params.id;
     try {
         const user = await UserModal.findById(id);
-        res.json(user);
+        // res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -60,7 +60,7 @@ app.put('/users/:id', async (req, res) => {
     try {
         const updatedUser = await UserModal.findByIdAndUpdate(
             id,
-            { name: req.body.name, email: req.body.email, age: req.body.age, password: req.body.password},
+            { name: req.body.name, email: req.body.email,  password: req.body.password},
             { new: true }
         );
         res.json(updatedUser);
@@ -74,6 +74,24 @@ app.delete('/users/:id', async (req, res) => {
     try {
         const deletedUser = await UserModal.findByIdAndDelete(userId);
         res.json(deletedUser);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// Remove a cookie when a user logs in
+app.post("/login", async (req, res) => {
+    try {
+        // Assuming your login logic involves checking credentials
+        const { email, password } = req.body;
+        
+        // Find the user in the MongoDB database
+        const user = await UserModal.findOne({ email, password });
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        res.json({ message: 'Login successful', user });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -103,7 +121,7 @@ app.get("/", async (req, res) => {
     try {
         // Use the SneakerModel here
         const sneakerModels = await SneakerModel.find();
-        console.log(sneakerModels);
+        // console.log(sneakerModels);
         res.json(sneakerModels);
     } catch (err) {
         res.status(500).json({ error: err.message });
