@@ -29,6 +29,8 @@ export default function Log() {
       if (response.data.message === "Login successful") {
         setValidation(true);
         Cookies.set("username", field.email,{expires:1});
+        Cookies.set("token", response.data.accesstoken,{expires:1});
+
         setError("");
         navigate("/Home");
       } else {
