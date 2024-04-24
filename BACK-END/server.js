@@ -101,6 +101,26 @@ app.post("/login", async (req, res) => {
     }
 });
 
+const authenticateJWT = (req, res, next) => {
+    const token = req.cookies.token || req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Access token is required' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESSTOKEN_SECRET);
+        req.user = decoded; // Add decoded information to the request object
+        next();
+    } catch (err) {
+        res.status(401).json({ error: 'Invalid or expired token' });
+    }
+};
+
+app.get("/protected", authenticateJWT, (req, res) => {
+    res.json({ message: 'This is a protected route', user: req.user });
+});
+
 app.post("/users", async (req, res) => { // Corrected route name
     try {
         // Validate input using Joi
