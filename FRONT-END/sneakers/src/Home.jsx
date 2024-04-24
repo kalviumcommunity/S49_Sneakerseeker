@@ -16,6 +16,8 @@ function Home(){
 
     const handlelogout = ()=>{
       Cookies.remove('username')
+      Cookies.remove('token')
+
       navigate('/login');
     }
     return(

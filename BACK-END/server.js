@@ -4,11 +4,13 @@ const cors = require('cors');
 const { UserModal, userValidationSchema } = require('./model/User.js');
 const SneakerModel = require('./model/sneaker.js'); // Import the SneakerModel
 const routes = require('./routes.js');
-
+const jwt = require('jsonwebtoken')
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+require('dotenv').config()
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
 // MongoDB URI for UserModel
 const userModalURI = "mongodb+srv://nandithak:nanditha2004@cluster0.hnqjcip.mongodb.net/Cites?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -86,15 +88,37 @@ app.post("/login", async (req, res) => {
         
         // Find the user in the MongoDB database
         const user = await UserModal.findOne({ email, password });
+        const accesstoken = jwt.sign({password},process.env.accesstoken_secret)
 
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-
-        res.json({ message: 'Login successful', user });
+        
+        res.cookie('token',accesstoken)
+        res.json({ message: 'Login successful', user , accesstoken:accesstoken});
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+const authenticateJWT = (req, res, next) => {
+    const token = req.cookies.token || req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Access token is required' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESSTOKEN_SECRET);
+        req.user = decoded; // Add decoded information to the request object
+        next();
+    } catch (err) {
+        res.status(401).json({ error: 'Invalid or expired token' });
+    }
+};
+
+app.get("/protected", authenticateJWT, (req, res) => {
+    res.json({ message: 'This is a protected route', user: req.user });
 });
 
 app.post("/users", async (req, res) => { // Corrected route name
