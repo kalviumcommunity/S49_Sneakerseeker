@@ -7,7 +7,7 @@ import Users from  './Crud.jsx';
 import CreateUser from  './CreateUser.jsx';
 import Log from './Components/login.jsx';
 import UpdateUser from './UserUpdate.jsx';
-
+import NewSneakerForm from "./Components/NewSneakerForm.jsx";
 function App() {
   return (
     <Router>
@@ -19,6 +19,7 @@ function App() {
       <Route path="/create" element={<CreateUser />} />
       <Route path="/login" element={<Log />} />
       <Route path="/update/:id" element={<UpdateUser />} />
+      <Route path="/sneakerform" element={<NewSneakerForm/>}></Route>
 
     </Routes>
   </Router>
