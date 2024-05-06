@@ -41,7 +41,7 @@ async function connectToSneakerDB() {
 app.get('/users', async (req, res) => {
     try {
         const users = await UserModal.find({});
-        // res.json(users);
+        res.json(users);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -147,6 +147,15 @@ app.get("/", async (req, res) => {
         const sneakerModels = await SneakerModel.find();
         // console.log(sneakerModels);
         res.json(sneakerModels);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post("/sneakers", async (req, res) => {
+    try {
+        const newSneaker = await SneakerModel.create(req.body);
+        res.status(201).json(newSneaker);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

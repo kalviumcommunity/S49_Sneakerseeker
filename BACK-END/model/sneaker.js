@@ -7,6 +7,7 @@ const SneakerSchema = new mongoose.Schema({
     color: String,
     rating: String,
     review: String,
+    created_by: String
 })
 
 const SneakerModel = mongoose.model("sneaker", SneakerSchema);
