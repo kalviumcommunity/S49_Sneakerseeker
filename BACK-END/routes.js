@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { execFile } = require('child_process');
 
-// CRUD routes
-
 // Create
 router.post('/resource', (req, res) => {
   execFile('bruno', ['docs.bruno/create.bru'], (error, stdout, stderr) => {

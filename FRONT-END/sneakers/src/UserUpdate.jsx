@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./components/Form.css";
 
 function UpdateUser() {
     const { id } = useParams();
@@ -12,7 +11,7 @@ function UpdateUser() {
     const navigate = useNavigate();
     useEffect(() => {
         axios.get(`http://localhost:3001/users/${id}`)
-            .then(response => {
+                .then(response => {
                 const { name, email, age, password } = response.data;
                 setName(name);
                 setEmail(email);

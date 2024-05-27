@@ -1,14 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const UserModal = require('./model/User.js'); // Corrected import name
+const { UserModal, userValidationSchema } = require('./model/User.js');
 const SneakerModel = require('./model/sneaker.js'); // Import the SneakerModel
 const routes = require('./routes.js');
-
+const jwt = require('jsonwebtoken')
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+require('dotenv').config()
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
 // MongoDB URI for UserModel
 const userModalURI = "mongodb+srv://nandithak:nanditha2004@cluster0.hnqjcip.mongodb.net/Cites?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -49,7 +51,7 @@ app.get('/users/:id', async (req, res) => {
     const id = req.params.id;
     try {
         const user = await UserModal.findById(id);
-        res.json(user);
+        // res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -60,7 +62,7 @@ app.put('/users/:id', async (req, res) => {
     try {
         const updatedUser = await UserModal.findByIdAndUpdate(
             id,
-            { name: req.body.name, email: req.body.email, age: req.body.age, password: req.body.password},
+            { name: req.body.name, email: req.body.email,  password: req.body.password},
             { new: true }
         );
         res.json(updatedUser);
@@ -77,6 +79,46 @@ app.delete('/users/:id', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+// Remove a cookie when a user logs in
+app.post("/login", async (req, res) => {
+    try {
+        // Assuming your login logic involves checking credentials
+        const { email, password } = req.body;
+        
+        // Find the user in the MongoDB database
+        const user = await UserModal.findOne({ email, password });
+        const accesstoken = jwt.sign({password},process.env.accesstoken_secret)
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        
+        res.cookie('token',accesstoken)
+        res.json({ message: 'Login successful', user , accesstoken:accesstoken});
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+const authenticateJWT = (req, res, next) => {
+    const token = req.cookies.token || req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Access token is required' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESSTOKEN_SECRET);
+        req.user = decoded; // Add decoded information to the request object
+        next();
+    } catch (err) {
+        res.status(401).json({ error: 'Invalid or expired token' });
+    }
+};
+
+app.get("/protected", authenticateJWT, (req, res) => {
+    res.json({ message: 'This is a protected route', user: req.user });
 });
 
 app.post("/users", async (req, res) => { // Corrected route name
@@ -103,8 +145,17 @@ app.get("/", async (req, res) => {
     try {
         // Use the SneakerModel here
         const sneakerModels = await SneakerModel.find();
-        console.log(sneakerModels);
+        // console.log(sneakerModels);
         res.json(sneakerModels);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post("/sneakers", async (req, res) => {
+    try {
+        const newSneaker = await SneakerModel.create(req.body);
+        res.status(201).json(newSneaker);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

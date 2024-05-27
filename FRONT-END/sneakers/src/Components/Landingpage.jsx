@@ -1,7 +1,7 @@
 import React from 'react';
-import '../Components/Landingpage.css'; 
+import './Landingpage.css'; 
 import { Link } from 'react-router-dom'; 
-import SignUp from './signup'; 
+import CreateUser from '../CreateUser'; 
 
 function Landingpage() {
   return (
@@ -14,8 +14,7 @@ function Landingpage() {
       <div className="logo">
         <Link to="/SignUp" className="button">Sign up</Link>
         <Link to="/Users" className="button">Data</Link>
-
-        {/* <Link to="/UserList">data</Link>  */}
+        <Link to="/login" className="button">login</Link>
       </div>
     </div>
   );

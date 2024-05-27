@@ -5,14 +5,12 @@ import { useNavigate } from "react-router-dom";
 function CreateUser() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [age, setAge] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState({
         name: "",
         email: "",
         passwordMatch: "",
-        age: "",
         password: ""
     });
     const navigate = useNavigate();
@@ -30,7 +28,6 @@ function CreateUser() {
             name: "",
             email: "",
             passwordMatch: "",
-            age: "",
             password: ""
         });
 
@@ -50,12 +47,7 @@ function CreateUser() {
         if (!isEmailValid(email)) {
             newErrors.email = "Invalid email format";
         }
-
-        // Check if age is more than 3
-        if (isNaN(age) || parseInt(age) <= 3) {
-            newErrors.age = "Age must be a number greater than 3";
-        }
-
+               
         // Check if password is between 4 and 10 characters
         if (password.length < 4 || password.length > 10) {
             newErrors.password = "Password must be between 4 and 10 characters";
@@ -69,7 +61,7 @@ function CreateUser() {
         }
 
         // Create user object
-        const newUser = { name, email, age, password };
+        const newUser = { name, email, password };
 
         // Send the user data to the server
         axios.post("http://localhost:3001/users", newUser)
@@ -99,12 +91,7 @@ function CreateUser() {
                             onChange={(e) => setEmail(e.target.value)} />
                         {errors.email && <div className="text-danger">{errors.email}</div>}
                     </div>
-                    <div className="mb-2">
-                        <label htmlFor="age">Age</label>
-                        <input type="text" id="age" placeholder="Enter Age" className="form-control"
-                            onChange={(e) => setAge(e.target.value)} />
-                        {errors.age && <div className="text-danger">{errors.age}</div>}
-                    </div>
+              
                     <div className="mb-2">
                         <label htmlFor="password">Password</label>
                         <input type="password" id="password" placeholder="Enter Password" className="form-control"
