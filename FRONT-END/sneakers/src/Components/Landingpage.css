@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('https://weartesters.com/uploads/2015/12/Get-One-Last-Look-at-the-Under-Armour-Curry-Two-Suit-Tie-Before-They-Drop-This-Friday-1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    
+  }
+  
+  h1{
+    font-size: 3.2em;
+  line-height: 1.1;
+  }
+
+  header {
+    color: #fff;
+    padding: 20px;
+    margin: 0;
+    position: relative; }
+
+  nav{
+    width:98vw
+  }
+ 
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; 
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+  
+  }
+  
+  .button:hover {
+    background-color: #0056b3; 
+  }
+
+  .logo {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+
+  }
+
+  div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
